@@ -1,23 +1,30 @@
 # ACI606 - Docker Rescue Challenge
 
-Este repositorio contiene una aplicación web multi-servicio que debe ejecutarse mediante Docker Compose.
+Aplicación web multi-servicio contenerizada compuesta por Frontend (Nginx), Backend/API (FastAPI) y Base de Datos (PostgreSQL).
 
-## Arquitectura general
+## Arquitectura
+Cliente -> Frontend (Nginx :8080 -> :80) -> Backend (FastAPI :8000) -> Database (PostgreSQL :5432 + volumen pgdata)
 
-Frontend (Nginx) -> Backend/API (FastAPI) -> Database (PostgreSQL)
+## Requisitos previos
+- Docker y Docker Compose v2 operativos.
+- Archivo .env configurado a partir de .env.example:
 
-## Situación inicial
+    cp .env.example .env
 
-El sistema fue recibido desde un equipo anterior y presenta múltiples problemas de construcción, configuración, comunicación y operación. No se informa la cantidad total de fallas ni su ubicación.
+## Procedimiento de operación
 
-Su trabajo consiste en diagnosticar el sistema utilizando evidencia técnica, reparar las incidencias identificadas y demostrar que la solución final puede ejecutarse de forma reproducible.
+### 1. Construir e iniciar la solución
+    docker compose up --build -d
 
-## Inicio sugerido
+### 2. Verificar estado de los servicios y salud
+    docker compose ps
+    curl -i http://127.0.0.1:8080/api/health
 
-```bash
-docker compose up --build -d
-docker compose ps
-docker compose logs
-```
+### 3. Consultar logs de diagnóstico
+    docker compose logs -f
 
-No reemplace la aplicación por un proyecto nuevo. Trabaje sobre los archivos suministrados y documente cada modificación en el informe técnico y mediante el historial del repositorio.
+### 4. Detener los servicios (conservando datos persistentes)
+    docker compose down
+
+### 5. Recrear la solución limpia
+    docker compose up --build -d
